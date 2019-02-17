@@ -9,7 +9,7 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
+        android.defaultConfig.vectorDrawables.useSupportLibrary = true
     }
     ext { googlePlayServicesVersion = "15.0.1" }
     buildTypes {
@@ -32,8 +32,12 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    // https://mvnrepository.com/artifact/com.google.android.gms/play-services-basement
+
+    //Slider
     implementation 'com.google.android.gms:play-services-basement:15.0.1'
+
+    //Floating Action Button/Menu
+    implementation 'com.github.clans:fab:1.6.4'
 
     //Firebase
     implementation 'com.google.firebase:firebase-messaging:17.3.3'

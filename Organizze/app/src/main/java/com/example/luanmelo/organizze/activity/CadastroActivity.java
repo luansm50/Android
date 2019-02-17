@@ -1,6 +1,6 @@
 package com.example.luanmelo.organizze.activity;
 
-import android.content.Intent;
+
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,8 +9,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.luanmelo.organizze.DAO.UsuarioDAO;
 import com.example.luanmelo.organizze.R;
 import com.example.luanmelo.organizze.config.ConfiguracaoFirebase;
+import com.example.luanmelo.organizze.helper.Base64Custom;
 import com.example.luanmelo.organizze.model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -68,6 +70,10 @@ public class CadastroActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
+                    UsuarioDAO usuarioDAO = new UsuarioDAO();
+                    String idUsuario = Base64Custom.codificarBase64(usuario.getEmail());
+                    usuario.setIdUsuario(idUsuario);
+                    usuarioDAO.salvar(usuario);
                     finish();
                 }else{
                     String excecao = "";

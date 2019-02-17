@@ -7,6 +7,8 @@ import android.view.View;
 
 import com.example.luanmelo.organizze.R;
 import com.example.luanmelo.organizze.config.ConfiguracaoFirebase;
+import com.example.luanmelo.organizze.helper.Base64Custom;
+import com.example.luanmelo.organizze.model.Usuario;
 import com.google.firebase.auth.FirebaseAuth;
 import com.heinrichreimersoftware.materialintro.app.IntroActivity;
 import com.heinrichreimersoftware.materialintro.slide.FragmentSlide;
@@ -51,24 +53,25 @@ public class MainActivity extends IntroActivity {
         verificarUsuarioLogado();
     }
 
-    public void verificarUsuarioLogado(){
+    public void verificarUsuarioLogado() {
         autenticacao = ConfiguracaoFirebase.getFirebaseAutenticacao();
-        if(autenticacao.getCurrentUser() != null){
+        if (autenticacao.getCurrentUser() != null) {
             abrirTelaPrincipal();
         }
     }
-    public void abrirTelaPrincipal(){
+
+    public void abrirTelaPrincipal() {
         startActivity(new Intent(this, PrincipalActivity.class));
         finish();
     }
 
 
-    public void btEntrar(View view){
+    public void btEntrar(View view) {
         startActivity(new Intent(this, LoginActivity.class));
 
     }
 
-    public void btCadastrar(View view){
+    public void btCadastrar(View view) {
         startActivity(new Intent(this, CadastroActivity.class));
     }
 }

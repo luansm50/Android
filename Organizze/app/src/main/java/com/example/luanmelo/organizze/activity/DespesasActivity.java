@@ -8,15 +8,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.luanmelo.organizze.DAO.MovimentacaoDAO;
-import com.example.luanmelo.organizze.DAO.UsuarioDAO;
 import com.example.luanmelo.organizze.R;
 import com.example.luanmelo.organizze.config.ConfiguracaoFirebase;
-import com.example.luanmelo.organizze.helper.Base64Custom;
 import com.example.luanmelo.organizze.helper.DateCustom;
 import com.example.luanmelo.organizze.model.Movimentacao;
 import com.example.luanmelo.organizze.model.Usuario;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,15 +25,14 @@ public class DespesasActivity extends AppCompatActivity {
     private EditText campoValor;
 
     private Movimentacao movimentacao;
-    private Usuario usuario;
+    private String usuarioID = ConfiguracaoFirebase.getUsuarioIdAutenticado();
+    private Double despesaTotal;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_despesas);
-
-        usuario = new UsuarioDAO().buscar();
 
         campoValor = findViewById(R.id.editValor);
         campoData = findViewById(R.id.editData);
@@ -46,6 +41,7 @@ public class DespesasActivity extends AppCompatActivity {
 
         //Preenche o campo data com a data atual
         campoData.setText(DateCustom.dataAtual());
+        recuperarDespesaTotal();
     }
 
     public void salvarDespesa(View view) {
@@ -62,16 +58,40 @@ public class DespesasActivity extends AppCompatActivity {
             movimentacao.setData(textoData);
             movimentacao.setTipo("d");
 
-            Double despesaTotal = usuario.getDespesaTotal();
             Double despesaAtualizada = despesaTotal + despesaGerada;
-            usuario.setDespesaTotal(despesaAtualizada);
 
-            UsuarioDAO usuarioDAO = new UsuarioDAO();
-            usuarioDAO.alterar(usuario);
-
-            MovimentacaoDAO movimentacaoDAO = new MovimentacaoDAO();
-            movimentacaoDAO.salvar(movimentacao);
+            atualizarReceita(despesaAtualizada);
+            movimentacao.salvar();
+            finish();
         }
+    }
+
+    public void recuperarDespesaTotal() {
+        DatabaseReference usuarioRef = ConfiguracaoFirebase.getFirebaseDatabase()
+                .child("usuarios").child(usuarioID);
+        usuarioRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Usuario usuario = dataSnapshot.getValue(Usuario.class);
+                despesaTotal = usuario.getDespesaTotal();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
+
+    public void atualizarReceita(Double despesa) {
+
+        DatabaseReference usuarioRef = ConfiguracaoFirebase.getFirebaseDatabase()
+                .child("usuarios").child(usuarioID);
+
+        usuarioRef.child("despesaTotal").setValue(despesa);
+
     }
 
     public boolean validaCamposDespesa(String textoValor, String textoCategoria,
@@ -109,8 +129,4 @@ public class DespesasActivity extends AppCompatActivity {
     }
 
 
-
-    public void atualizarDespesa() {
-
-    }
 }

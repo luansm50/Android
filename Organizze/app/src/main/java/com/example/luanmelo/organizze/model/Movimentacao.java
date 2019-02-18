@@ -5,9 +5,11 @@ import com.example.luanmelo.organizze.helper.Base64Custom;
 import com.example.luanmelo.organizze.helper.DateCustom;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Exclude;
 
 public class Movimentacao {
 
+    private String idMovimentacao;
     private String data;
     private String categoria;
     private String descricao;
@@ -17,6 +19,22 @@ public class Movimentacao {
     public Movimentacao() {
     }
 
+    public void salvar(){
+        ConfiguracaoFirebase.getFirebaseDatabase().child("movimentacao")
+                .child(ConfiguracaoFirebase.getUsuarioIdAutenticado())
+                .child(DateCustom.mesAnoDataEscolhida(data))
+                .push()
+                .setValue(this);
+    }
+
+    @Exclude
+    public String getIdMovimentacao() {
+        return idMovimentacao;
+    }
+
+    public void setIdMovimentacao(String idMovimentacao) {
+        this.idMovimentacao = idMovimentacao;
+    }
 
     public String getData() {
         return data;

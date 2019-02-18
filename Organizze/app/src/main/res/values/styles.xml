@@ -15,7 +15,8 @@
         <item name="colorPrimary">@color/colorPrimaryDespesa</item>\
         <item name="colorPrimaryDark">@color/colorPrimaryDarkDespesa</item>
         <item name="colorAccent">@color/colorAccentDespesa</item>
-    </style>\
+    </style>
+    \
 
     <!--Tema aplicado nas receitas-->
     <style name="receitaTheme" parent="Theme.AppCompat.Light.NoActionBar">

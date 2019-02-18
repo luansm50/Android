@@ -18,16 +18,19 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activity.PrincipalActivity"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.CadastroActivity" />
         <activity
-            android:name=".activity.PrincipalActivity"
-            android:label="@string/title_activity_principal"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.ReceitasActivity"
-            android:theme="@style/receitaTheme"/>
-        <activity android:name=".activity.DespesasActivity"
-            android:theme="@style/despesaTheme"/>
+            android:name=".activity.ReceitasActivity"
+            android:theme="@style/receitaTheme" />
+        <activity
+            android:name=".activity.DespesasActivity"
+            android:theme="@style/despesaTheme" />
+
     </application>
 
 </manifest>

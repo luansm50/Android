@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.luanmelo.organizze.DAO.UsuarioDAO;
 import com.example.luanmelo.organizze.R;
 import com.example.luanmelo.organizze.config.ConfiguracaoFirebase;
 import com.example.luanmelo.organizze.helper.Base64Custom;
@@ -35,6 +34,9 @@ public class CadastroActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro);
+
+
+        getSupportActionBar().setTitle("Cadastro");
 
         campoNome = findViewById(R.id.editNome);
         campoEmail = findViewById(R.id.editEmail);
@@ -70,10 +72,9 @@ public class CadastroActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    UsuarioDAO usuarioDAO = new UsuarioDAO();
                     String idUsuario = Base64Custom.codificarBase64(usuario.getEmail());
                     usuario.setIdUsuario(idUsuario);
-                    usuarioDAO.salvar(usuario);
+                    usuario.salvar();
                     finish();
                 }else{
                     String excecao = "";

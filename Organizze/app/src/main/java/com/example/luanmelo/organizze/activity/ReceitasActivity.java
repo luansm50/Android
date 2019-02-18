@@ -7,12 +7,15 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.luanmelo.organizze.DAO.MovimentacaoDAO;
-import com.example.luanmelo.organizze.DAO.UsuarioDAO;
 import com.example.luanmelo.organizze.R;
+import com.example.luanmelo.organizze.config.ConfiguracaoFirebase;
 import com.example.luanmelo.organizze.helper.DateCustom;
 import com.example.luanmelo.organizze.model.Movimentacao;
 import com.example.luanmelo.organizze.model.Usuario;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 public class ReceitasActivity extends AppCompatActivity {
 
@@ -20,14 +23,15 @@ public class ReceitasActivity extends AppCompatActivity {
     private EditText campoValor;
 
     private Movimentacao movimentacao;
-    private Usuario usuario;
+    private String usuarioID = ConfiguracaoFirebase.getUsuarioIdAutenticado();
+    private Double receitaTotal;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receitas);
 
-        usuario = new UsuarioDAO().buscar();
 
         campoValor = findViewById(R.id.editValor);
         campoData = findViewById(R.id.editData);
@@ -36,6 +40,7 @@ public class ReceitasActivity extends AppCompatActivity {
 
         //Preenche o campo data com a data atual
         campoData.setText(DateCustom.dataAtual());
+        recuperarReceitaTotal();
     }
 
     public void salvarReceita(View view) {
@@ -52,16 +57,38 @@ public class ReceitasActivity extends AppCompatActivity {
             movimentacao.setData(textoData);
             movimentacao.setTipo("r");
 
-            Double receitaTotal = usuario.getDespesaTotal();
             Double receitaAtualizada = receitaTotal + receitaGerada;
-            usuario.setReceitaTotal(receitaAtualizada);
 
-            UsuarioDAO usuarioDAO = new UsuarioDAO();
-            usuarioDAO.alterar(usuario);
+            atualizarUsuarioReceita(receitaAtualizada);
 
-            MovimentacaoDAO movimentacaoDAO = new MovimentacaoDAO();
-            movimentacaoDAO.salvar(movimentacao);
+            movimentacao.salvar();
+            finish();
         }
+    }
+
+    public void recuperarReceitaTotal() {
+        DatabaseReference usuarioRef = ConfiguracaoFirebase.getFirebaseDatabase()
+                .child("usuarios").child(usuarioID);
+
+        usuarioRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Usuario usuario = dataSnapshot.getValue(Usuario.class);
+                receitaTotal = usuario.getReceitaTotal();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    public void atualizarUsuarioReceita(final Double receitaTotal) {
+        DatabaseReference usuarioRef = ConfiguracaoFirebase.getFirebaseDatabase().child("usuarios")
+                .child(usuarioID);
+        usuarioRef.child("receitaTotal").setValue(receitaTotal);
     }
 
     public boolean validaCamposDespesa(String textoValor, String textoCategoria,

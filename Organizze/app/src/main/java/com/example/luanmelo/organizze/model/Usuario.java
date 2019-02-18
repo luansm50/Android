@@ -27,7 +27,11 @@ public class Usuario {
 
 
 
-
+    public void salvar(){
+        ConfiguracaoFirebase.getFirebaseDatabase().child("usuarios")
+                .child(idUsuario)
+                .setValue(this);
+    }
 
     public Double getReceitaTotal() {
         return receitaTotal;

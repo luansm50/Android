@@ -10,5 +10,6 @@
     <string name="menu_configuracoes">Configurações</string>
     <string name="menu_sair">Sair</string>
     <string name="text_configuracao">Esse não é o seu nome de usuário nem sua senha. Esse nome ficará visível para seus contatos do WhatsApp</string>
+    <string name="title_activity_chat">ChatActivity</string>
 
 </resources>

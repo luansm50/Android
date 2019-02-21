@@ -1,18 +1,45 @@
 package com.example.luanmelo.whatsapp.fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.example.luanmelo.whatsapp.R;
+import com.example.luanmelo.whatsapp.activity.ChatActivity;
+import com.example.luanmelo.whatsapp.adapter.ContatosAdapter;
+import com.example.luanmelo.whatsapp.config.ConfiguracaoFirebase;
+import com.example.luanmelo.whatsapp.helper.RecyclerItemClickListener;
+import com.example.luanmelo.whatsapp.helper.UsuarioFirebase;
+import com.example.luanmelo.whatsapp.model.Usuario;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ContatosFragment extends Fragment {
+
+    private RecyclerView recyclerViewListaContatos;
+    private ContatosAdapter contatosAdapter;
+    private List<Usuario> listaContatos = new ArrayList<>();
+    private FirebaseUser usuarioAtual;
+    private DatabaseReference usuariosRef;
+    private ValueEventListener valueEventListenerContatos;
 
 
     public ContatosFragment() {
@@ -24,7 +51,79 @@ public class ContatosFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_contatos, container, false);
+        View view = inflater.inflate(R.layout.fragment_contatos, container, false);
+
+        recyclerViewListaContatos = view.findViewById(R.id.recyclerViewListaContatos);
+
+        usuariosRef = ConfiguracaoFirebase.getDatabaseReference().child("usuarios");
+        usuarioAtual = UsuarioFirebase.getUsuarioAtual();
+
+
+        //configurar adapter
+        contatosAdapter = new ContatosAdapter(getContext(), listaContatos);
+        //configurar recycler view
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerViewListaContatos.setLayoutManager(layoutManager);
+        recyclerViewListaContatos.setHasFixedSize(true);
+        recyclerViewListaContatos.setAdapter(contatosAdapter);
+        recyclerViewListaContatos.addOnItemTouchListener(
+                new RecyclerItemClickListener(
+                    getActivity(),
+                    recyclerViewListaContatos,
+                        new RecyclerItemClickListener.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                Intent i = new Intent(getActivity(), ChatActivity.class);
+                                startActivity(i);
+                            }
+
+                            @Override
+                            public void onItemClick(View view, int position) {
+
+                            }
+
+                            @Override
+                            public void onLongItemClick(View view, int position) {
+
+                            }
+                        }
+        ));
+
+        return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        recuperarContatos();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        usuariosRef.removeEventListener(valueEventListenerContatos);
+    }
+
+    public void recuperarContatos() {
+
+        valueEventListenerContatos = usuariosRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for (DataSnapshot dados : dataSnapshot.getChildren()) {
+                    Usuario usuario = dados.getValue(Usuario.class);
+                    String emailUsuarioAtual = usuarioAtual.getEmail();
+                    if (!emailUsuarioAtual.equals(usuario.getEmail()))
+                        listaContatos.add(usuario);
+                }
+                contatosAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }

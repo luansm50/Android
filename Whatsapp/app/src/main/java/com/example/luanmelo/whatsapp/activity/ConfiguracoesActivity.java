@@ -1,7 +1,6 @@
 package com.example.luanmelo.whatsapp.activity;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -77,7 +76,7 @@ public class ConfiguracoesActivity extends AppCompatActivity {
 
         imageButtoCamera = findViewById(R.id.imageButtonCamera);
         imageButtonGaleria = findViewById(R.id.imageButtonGaleria);
-        circleImageView = findViewById(R.id.circleImageViewFotoPerfil);
+        circleImageView = findViewById(R.id.circleImageViewFotoContato);
         campoNome = findViewById(R.id.editNome);
         imageAtualizarNome = findViewById(R.id.imageAtualizarNome);
 

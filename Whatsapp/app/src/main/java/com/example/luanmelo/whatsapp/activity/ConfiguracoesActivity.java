@@ -123,7 +123,8 @@ public class ConfiguracoesActivity extends AppCompatActivity {
                 String nome = campoNome.getText().toString();
                 boolean retorno = UsuarioFirebase.atualizarNomeUsuario(nome);
                 if (retorno) {
-
+                    usuarioLogado.setNome(nome);
+                    usuarioLogado.atualizar();
                     Toast.makeText(ConfiguracoesActivity.this,
                             "Nome alterado com sucesso",
                             Toast.LENGTH_SHORT).show();

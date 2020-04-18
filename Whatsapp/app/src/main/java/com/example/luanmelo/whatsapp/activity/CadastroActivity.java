@@ -58,7 +58,7 @@ public class CadastroActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             try {
-                                String idUsuario = Base64Custom.codificarBase64(firebaseAuth.getUid());
+                                String idUsuario = UsuarioFirebase.getIdUsuario();
                                 usuario.setIdUsuario(idUsuario);
                                 usuario.salvar();
                                 UsuarioFirebase.atualizarNomeUsuario(usuario.getNome());

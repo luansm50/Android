@@ -4,10 +4,11 @@ import com.example.luanmelo.whatsapp.config.ConfiguracaoFirebase;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Usuario {
+public class Usuario implements Serializable {
 
     private String idUsuario;
     private String email;
@@ -36,8 +37,9 @@ public class Usuario {
 
     public Map<String, Object> converterParaMap(){
         HashMap<String, Object> usuarioMap = new HashMap<>();
+        usuarioMap.put("idUsuario", getIdUsuario());
         usuarioMap.put("email", getEmail());
-        usuarioMap.put("nome", getSenha());
+        usuarioMap.put("nome", getNome());
         usuarioMap.put("foto", getFoto());
 
         return usuarioMap;
@@ -52,7 +54,6 @@ public class Usuario {
         this.foto = foto;
     }
 
-    @Exclude
     public String getIdUsuario() {
         return idUsuario;
     }

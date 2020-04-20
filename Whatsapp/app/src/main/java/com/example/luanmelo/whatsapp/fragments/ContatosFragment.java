@@ -14,12 +14,12 @@ import android.widget.AdapterView;
 
 import com.example.luanmelo.whatsapp.R;
 import com.example.luanmelo.whatsapp.activity.ChatActivity;
+import com.example.luanmelo.whatsapp.activity.GrupoActivity;
 import com.example.luanmelo.whatsapp.adapter.ContatosAdapter;
 import com.example.luanmelo.whatsapp.config.ConfiguracaoFirebase;
 import com.example.luanmelo.whatsapp.helper.RecyclerItemClickListener;
 import com.example.luanmelo.whatsapp.helper.UsuarioFirebase;
 import com.example.luanmelo.whatsapp.model.Usuario;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -79,9 +79,20 @@ public class ContatosFragment extends Fragment {
                             @Override
                             public void onItemClick(View view, int position) {
                                 Usuario usuarioSelecionado = listaContatos.get(position);
-                                Intent i = new Intent(getActivity(), ChatActivity.class);
-                                i.putExtra("chatContato", usuarioSelecionado);
-                                startActivity(i);
+                                boolean cabecalho = usuarioSelecionado.getEmail().isEmpty();
+
+                                if(cabecalho)
+                                {
+                                    Intent i = new Intent(getActivity(), GrupoActivity.class);
+                                    i.putExtra("chatContato", usuarioSelecionado);
+                                    startActivity(i);
+                                }
+                                else
+                                {
+                                    Intent i = new Intent(getActivity(), ChatActivity.class);
+                                    i.putExtra("chatContato", usuarioSelecionado);
+                                    startActivity(i);
+                                }
                             }
 
                             @Override
@@ -90,6 +101,12 @@ public class ContatosFragment extends Fragment {
                             }
                         }
         ));
+
+        Usuario itemGrupo = new Usuario();
+        itemGrupo.setNome("Novo grupo");
+        itemGrupo.setEmail("");
+
+        listaContatos.add(itemGrupo);
 
         return view;
     }

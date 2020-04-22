@@ -41,7 +41,6 @@ public class ContatosFragment extends Fragment {
     private DatabaseReference usuariosRef;
     private ValueEventListener valueEventListenerContatos;
 
-
     public ContatosFragment() {
         // Required empty public constructor
     }
@@ -57,7 +56,6 @@ public class ContatosFragment extends Fragment {
 
         usuariosRef = ConfiguracaoFirebase.getDatabaseReference().child("usuarios");
         usuarioAtual = UsuarioFirebase.getUsuarioAtual();
-
 
         //configurar adapter
         contatosAdapter = new ContatosAdapter(getContext(), listaContatos);

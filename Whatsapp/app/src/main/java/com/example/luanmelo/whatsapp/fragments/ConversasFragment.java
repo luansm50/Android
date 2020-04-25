@@ -21,6 +21,7 @@ import com.example.luanmelo.whatsapp.config.ConfiguracaoFirebase;
 import com.example.luanmelo.whatsapp.helper.RecyclerItemClickListener;
 import com.example.luanmelo.whatsapp.helper.UsuarioFirebase;
 import com.example.luanmelo.whatsapp.model.Conversa;
+import com.example.luanmelo.whatsapp.model.Grupo;
 import com.example.luanmelo.whatsapp.model.Usuario;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -76,10 +77,24 @@ public class ConversasFragment extends Fragment {
                         new RecyclerItemClickListener.OnItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
-                                Usuario usuario = listaConversas.get(position).getUsuarioExibicao();
-                                Intent i = new Intent(getActivity(), ChatActivity.class);
-                                i.putExtra("chatContato", usuario);
-                                startActivity(i);
+                                List<Conversa> listConversaAtualizada = conversasAdapter.getConversas();
+                                Conversa conversaSelecionada = listConversaAtualizada.get(position);
+
+                                if(conversaSelecionada.getIsGroup().equals("true"))
+                                {
+                                    Grupo grupo = listaConversas.get(position).getGrupo();
+                                    Intent i = new Intent(getActivity(), ChatActivity.class);
+                                    i.putExtra("chatGrupo", grupo);
+                                    startActivity(i);
+                                }
+                                else
+                                {
+                                    Usuario usuario = listaConversas.get(position).getUsuarioExibicao();
+                                    Intent i = new Intent(getActivity(), ChatActivity.class);
+                                    i.putExtra("chatContato", usuario);
+                                    startActivity(i);
+                                }
+
                             }
 
                             @Override
@@ -120,13 +135,27 @@ public class ConversasFragment extends Fragment {
         List<Conversa> listaConversasBusca = new ArrayList<>();
         for(Conversa conversa : listaConversas)
         {
-            String nome = conversa.getUsuarioExibicao().getNome().toUpperCase();
-            String ultimaMsg = conversa.getUltimaMensagem().toUpperCase();
-
-            if(nome.contains(texto) || texto.contains(ultimaMsg))
+            if(conversa.getUsuarioExibicao() != null)
             {
-                listaConversasBusca.add(conversa);
+                String nome = conversa.getUsuarioExibicao().getNome().toUpperCase();
+                String ultimaMsg = conversa.getUltimaMensagem().toUpperCase();
+
+                if (nome.contains(texto) || texto.contains(ultimaMsg)) {
+                    listaConversasBusca.add(conversa);
+                }
             }
+            else
+            {
+                String nome = conversa.getGrupo().getName().toUpperCase();
+                String ultimaMsg = conversa.getUltimaMensagem().toUpperCase();
+
+                if (nome.contains(texto) || texto.contains(ultimaMsg)) {
+                    listaConversasBusca.add(conversa);
+                }
+            }
+
+
+
         }
 
         conversasAdapter = new ConversasAdapter(listaConversasBusca, getActivity());
@@ -143,6 +172,8 @@ public class ConversasFragment extends Fragment {
 
     public void recuperarConversas()
     {
+        listaConversas.clear();
+
         conversasRef = database.child("conversas").child(identificadorUsuario);
         childEventListenerConversas = conversasRef.addChildEventListener(new ChildEventListener() {
             @Override

@@ -16,9 +16,11 @@ import com.example.luanmelo.whatsapp.R;
 import com.example.luanmelo.whatsapp.activity.ChatActivity;
 import com.example.luanmelo.whatsapp.activity.GrupoActivity;
 import com.example.luanmelo.whatsapp.adapter.ContatosAdapter;
+import com.example.luanmelo.whatsapp.adapter.ConversasAdapter;
 import com.example.luanmelo.whatsapp.config.ConfiguracaoFirebase;
 import com.example.luanmelo.whatsapp.helper.RecyclerItemClickListener;
 import com.example.luanmelo.whatsapp.helper.UsuarioFirebase;
+import com.example.luanmelo.whatsapp.model.Conversa;
 import com.example.luanmelo.whatsapp.model.Usuario;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -76,7 +78,9 @@ public class ContatosFragment extends Fragment {
 
                             @Override
                             public void onItemClick(View view, int position) {
-                                Usuario usuarioSelecionado = listaContatos.get(position);
+                                List<Usuario> listaUsuarioAtualizada = contatosAdapter.getContatos();
+
+                                Usuario usuarioSelecionado = listaUsuarioAtualizada.get(position);
                                 boolean cabecalho = usuarioSelecionado.getEmail().isEmpty();
 
                                 if(cabecalho)
@@ -100,11 +104,7 @@ public class ContatosFragment extends Fragment {
                         }
         ));
 
-        Usuario itemGrupo = new Usuario();
-        itemGrupo.setNome("Novo grupo");
-        itemGrupo.setEmail("");
-
-        listaContatos.add(itemGrupo);
+        adicionarMenuNovoGrupo();
 
         return view;
     }
@@ -121,12 +121,24 @@ public class ContatosFragment extends Fragment {
         usuariosRef.removeEventListener(valueEventListenerContatos);
     }
 
+    public void adicionarMenuNovoGrupo()
+    {
+        Usuario itemGrupo = new Usuario();
+        itemGrupo.setNome("Novo grupo");
+        itemGrupo.setEmail("");
+
+        listaContatos.add(itemGrupo);
+    }
+
     public void recuperarContatos() {
+
+
 
         valueEventListenerContatos = usuariosRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                listaContatos.clear();
+                adicionarMenuNovoGrupo();
                 for (DataSnapshot dados : dataSnapshot.getChildren()) {
                     Usuario usuario = dados.getValue(Usuario.class);
                     String emailUsuarioAtual = usuarioAtual.getEmail();
@@ -141,6 +153,30 @@ public class ContatosFragment extends Fragment {
 
             }
         });
+    }
+    public void pesquisarContatos(String texto)
+    {
+        List<Usuario> listaContatosBusca = new ArrayList<>();
+        for(Usuario usuario : listaContatos)
+        {
+            String nome = usuario.getNome().toUpperCase();
+
+            if(nome.contains(nome))
+            {
+                listaContatosBusca.add(usuario);
+            }
+        }
+
+        contatosAdapter = new ContatosAdapter(getActivity(), listaContatosBusca);
+        recyclerViewListaContatos.setAdapter(contatosAdapter);
+        contatosAdapter.notifyDataSetChanged();
+    }
+
+    public void recarregarContatos()
+    {
+        contatosAdapter =new ContatosAdapter(getActivity(), listaContatos);
+        recyclerViewListaContatos.setAdapter(contatosAdapter);
+        contatosAdapter.notifyDataSetChanged();
     }
 
 }

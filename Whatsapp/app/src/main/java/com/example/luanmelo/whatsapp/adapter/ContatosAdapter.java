@@ -35,6 +35,11 @@ public class ContatosAdapter extends RecyclerView.Adapter<ContatosAdapter.MyView
         return new MyViewHolder(itemLista);
     }
 
+    public List<Usuario> getContatos()
+    {
+        return this.listaContatos;
+    }
+
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
         Usuario usuario = listaContatos.get(i);

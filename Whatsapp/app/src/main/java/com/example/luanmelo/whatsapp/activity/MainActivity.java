@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
 
         firebaseAuth = ConfiguracaoFirebase.getFirebaseAuth();
 
-
         Toolbar toolbar = findViewById(R.id.toolbarPrincipal);
         toolbar.setTitle("Whatsapp");
         setSupportActionBar(toolbar);
@@ -46,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
                 .add("Contatos", ContatosFragment.class)
                 .create()
         );
-        ViewPager viewPager = findViewById(R.id.viewpager);
+        final ViewPager viewPager = findViewById(R.id.viewpager);
         viewPager.setAdapter(adapter);
 
         SmartTabLayout viewPagerTab = findViewById(R.id.viewPagerTab);
@@ -67,8 +66,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -78,7 +75,27 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Log.d("evento", "onQueryTextChange");
+
+                switch (viewPager.getCurrentItem())
+                {
+                    case 0: ConversasFragment conversasFragment = (ConversasFragment) adapter.getPage(0);
+
+                        if(newText != null && !newText.isEmpty())
+                        {
+                            conversasFragment.pesquisarConversas(newText.toUpperCase());
+                        }else{
+                            conversasFragment.recarregarConversas();
+                        }
+                        break;
+                    case 1: ContatosFragment contatosFragment = (ContatosFragment) adapter.getPage(1);
+                        if(newText != null && !newText.isEmpty())
+                        {
+                            contatosFragment.pesquisarContatos(newText.toUpperCase());
+                        }else{
+                            contatosFragment.recarregarContatos();
+                        }
+                        break;
+                }
 
                 ConversasFragment fragment = (ConversasFragment) adapter.getPage(0);
 

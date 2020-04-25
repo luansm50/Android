@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.example.luanmelo.whatsapp.R;
 import com.example.luanmelo.whatsapp.helper.GlideApp;
 import com.example.luanmelo.whatsapp.model.Conversa;
+import com.example.luanmelo.whatsapp.model.Grupo;
 import com.example.luanmelo.whatsapp.model.Usuario;
 
 import java.util.List;
@@ -36,21 +37,58 @@ public class ConversasAdapter extends RecyclerView.Adapter<ConversasAdapter.MyVi
         return new MyViewHolder(itemList);
     }
 
+    public List<Conversa> getConversas()
+    {
+        return this.conversas;
+    }
+
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int position)
     {
         Conversa conversa = conversas.get(position);
         myViewHolder.ultimaMensagem.setText(conversa.getUltimaMensagem());
 
-        Usuario usuario = conversa.getUsuarioExibicao();
-        myViewHolder.nome.setText(usuario.getNome());
+        if(conversa.getIsGroup().equals("true"))
+        {
+            Grupo grupo = conversa.getGrupo();
+            myViewHolder.nome.setText(grupo.getName());
 
-        if(usuario.getFoto() != null){
-            Uri uri = Uri.parse(usuario.getFoto());
-            GlideApp.with(context).load(uri).into(myViewHolder.foto);
-        }else{
-            myViewHolder.foto.setImageResource(R.drawable.padrao);
+            if(grupo.getFoto() != null)
+            {
+                Uri uri = Uri.parse(grupo.getFoto());
+                GlideApp.with(context).load(uri).into(myViewHolder.foto);
+            }
+            else
+            {
+                myViewHolder.foto.setImageResource(R.drawable.padrao);
+            }
         }
+        else
+        {
+            Usuario usuario = conversa.getUsuarioExibicao();
+
+            if(usuario != null)
+            {
+                myViewHolder.nome.setText(usuario.getNome());
+
+                if(usuario.getFoto() != null)
+                {
+                    Uri uri = Uri.parse(usuario.getFoto());
+                    GlideApp.with(context).load(uri).into(myViewHolder.foto);
+                }
+                else
+                {
+                    myViewHolder.foto.setImageResource(R.drawable.padrao);
+                }
+            }
+
+
+        }
+
+
+
+
+
     }
 
     @Override

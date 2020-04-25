@@ -57,6 +57,17 @@ public class MensagensAdapter extends RecyclerView.Adapter<MensagensAdapter.MyVi
         String msg = mensagem.getMensagem();
         String img = mensagem.getImagem();
 
+        String nome = mensagem.getNomeUsuario();
+
+        if(!nome.isEmpty())
+        {
+            holder.nomeUsuario.setText(nome);
+        }
+        else
+        {
+            holder.nomeUsuario.setVisibility(View.GONE);
+        }
+
         if(img != null)
         {
             Uri url = Uri.parse(img);
@@ -95,11 +106,13 @@ public class MensagensAdapter extends RecyclerView.Adapter<MensagensAdapter.MyVi
     {
         TextView mensagem;
         ImageView imagem;
+        TextView nomeUsuario;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             mensagem = itemView.findViewById(R.id.textMensagemTexto);
             imagem = itemView.findViewById(R.id.imageMensagemFoto);
+            nomeUsuario = itemView.findViewById(R.id.textNomeExibicao);
         }
     }
 }

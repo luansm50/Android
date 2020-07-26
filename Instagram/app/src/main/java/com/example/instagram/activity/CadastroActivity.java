@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.example.instagram.DAO.UsuarioDAO;
 import com.example.instagram.R;
 import com.example.instagram.helper.ConfiguracaoFirabese;
+import com.example.instagram.helper.UsuarioFirebase;
 import com.example.instagram.model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -68,7 +69,7 @@ public class CadastroActivity extends AppCompatActivity {
         });
     }
 
-    public void cadastrar(Usuario usuario)
+    public void cadastrar(final Usuario usuario)
     {
         Task<AuthResult> task =  firebaseAuth.createUserWithEmailAndPassword(
                 usuario.getEmail(),
@@ -81,10 +82,27 @@ public class CadastroActivity extends AppCompatActivity {
                         progressBar.setVisibility(View.GONE);
                         if (task.isSuccessful())
                         {
-                            Toast.makeText(CadastroActivity.this, "Cadastro com sucesso!", Toast.LENGTH_SHORT);
-                            Intent i = new Intent(getApplicationContext(), MainActivity.class);
-                            startActivity(i);
-                            finish();
+                            try
+                            {
+                                //Salvar dados no firebase
+                                String idUsuario = task.getResult().getUser().getUid();
+                                usuario.setId(idUsuario);
+                                usuario.salvar();
+
+                                //Salvar dados no profile do Firebase
+                                UsuarioFirebase.atualizarNomeUsuario(usuario.getNome());
+
+                                Toast.makeText(CadastroActivity.this, "Cadastro com sucesso!", Toast.LENGTH_SHORT);
+                                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                                startActivity(i);
+                                finish();
+                            }
+                            catch(Exception e)
+                            {
+                                e.printStackTrace();
+                            }
+
+
                         }
                         else
                         {

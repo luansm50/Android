@@ -24,23 +24,11 @@ public class PerfilFragment extends Fragment {
     private CircleImageView imagePerfil;
     public GridView gridViewPerfil;
     private TextView textPublicacoes, textSeguidores, textSeguindo;
-    private Button buttonEditarPerfil;
+    private Button buttonAcaoPerfil;
 
     public PerfilFragment() {
         // Required empty public constructor
     }
-
-
-//    public static PerfilFragment newInstance(String param1, String param2) {
-//        PerfilFragment fragment = new PerfilFragment();
-//
-//        return fragment;
-//    }
-//
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,14 +39,14 @@ public class PerfilFragment extends Fragment {
         //Configuraçoes dos componentes;
         gridViewPerfil = view.findViewById(R.id.gridViewPerfil);
         progressBar = view.findViewById(R.id.progressBarPerfil);
-        imagePerfil = view.findViewById(R.id.imageEditarPerfil);
+        imagePerfil = view.findViewById(R.id.imageFotoPesquisa);
         textPublicacoes = view.findViewById(R.id.textPublicacoes);
         textSeguidores = view.findViewById(R.id.textSeguidores);
         textSeguindo = view.findViewById(R.id.textSeguindo);
-        buttonEditarPerfil = view.findViewById(R.id.buttonEditarPerfil);
+        buttonAcaoPerfil = view.findViewById(R.id.buttonAcaoPerfil);
 
         //Abre ediçao de perfil
-        buttonEditarPerfil.setOnClickListener(new View.OnClickListener() {
+        buttonAcaoPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), EditarPerfilActivity.class);

@@ -25,7 +25,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -191,7 +190,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
 
     public void inicializarComponentes()
     {
-        imageEditarPerfil       = findViewById(R.id.imageEditarPerfil);
+        imageEditarPerfil       = findViewById(R.id.imageFotoPesquisa);
         textAlterarFoto         = findViewById(R.id.textAlterarFoto);
         editNomePerfil          = findViewById(R.id.editNomePerfil);
         editEmailPerfil         = findViewById(R.id.editEmailPerfil);

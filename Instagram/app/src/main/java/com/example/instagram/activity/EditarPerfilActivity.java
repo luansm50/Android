@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.Manifest;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.instagram.R;
 import com.example.instagram.helper.ConfiguracaoFirabese;
+import com.example.instagram.helper.Permissao;
 import com.example.instagram.helper.UsuarioFirebase;
 import com.example.instagram.model.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -44,11 +46,18 @@ public class EditarPerfilActivity extends AppCompatActivity {
     private String  identificadorUsuario;
     private StorageReference storageReference;
 
+    private String[] permissoesNecessarias = new String[]
+            {
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+            };
+
     private static final int SELECAO_GALERIA = 200;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_perfil);
+
+        Permissao.validarPermissoes(permissoesNecessarias, this, 1);
 
         usuarioLogado = UsuarioFirebase.getDadosUsuarioLogado();
         identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();

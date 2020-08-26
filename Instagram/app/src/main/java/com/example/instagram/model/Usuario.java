@@ -33,11 +33,33 @@ public class Usuario implements Serializable
     public void atualizar()
     {
         DatabaseReference firebaseRef = ConfiguracaoFirabese.getReferenceFirabese();
+        Map objeto = new HashMap();
+        objeto.put("/usuarios/" + getId() + "/nome", getNome());
+        objeto.put("/usuarios/" + getId() + "/caminhoFoto", getCaminhoFoto());
+
+        firebaseRef.updateChildren(objeto);
+
+
+
+
+
+//        DatabaseReference usuarioRef = firebaseRef
+//                .child("usuarios")
+//                .child(getId());
+//        Map<String, Object> valoresUsuario = converterParaMap();
+//        usuarioRef.updateChildren(valoresUsuario);
+    }
+
+    public void atualizarQtPostagens()
+    {
+        DatabaseReference firebaseRef = ConfiguracaoFirabese.getReferenceFirabese();
         DatabaseReference usuarioRef = firebaseRef
                 .child("usuarios")
                 .child(getId());
-        Map<String, Object> valoresUsuario = converterParaMap();
-        usuarioRef.updateChildren(valoresUsuario);
+        HashMap<String, Object> dados = new HashMap<>();
+        dados.put("postagens", getPostagens());
+
+        usuarioRef.updateChildren(dados);
     }
 
     public Map<String, Object> converterParaMap()

@@ -4,9 +4,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ProgressBar;
@@ -14,15 +16,23 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.instagram.R;
+import com.example.instagram.adapter.AdapterGrid;
 import com.example.instagram.helper.ConfiguracaoFirabese;
 import com.example.instagram.helper.UsuarioFirebase;
+import com.example.instagram.model.Postagem;
 import com.example.instagram.model.Usuario;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
+import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -43,9 +53,13 @@ public class PerfilAmigoActivity extends AppCompatActivity {
     private DatabaseReference usuarioLogadoRef;
     private DatabaseReference seguidoresRef;
     private ValueEventListener valueEventListenerPerfilAmigo;
+    private DatabaseReference postagensUsuarioRef;
+
+    private AdapterGrid adapterGrid;
 
     private String idUsuarioLogado;
 
+    private List<Postagem> postagens;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +69,7 @@ public class PerfilAmigoActivity extends AppCompatActivity {
         //Configuraçoes dos componentes;
         gridViewPerfil = findViewById(R.id.gridViewPerfil);
         progressBar = findViewById(R.id.progressBarPerfil);
-        imagePerfil = findViewById(R.id.imageFotoPesquisa);
+        imagePerfil = findViewById(R.id.imagePerfilPostagem);
         textPublicacoes = findViewById(R.id.textPublicacoes);
         textSeguidores = findViewById(R.id.textSeguidores);
         textSeguindo = findViewById(R.id.textSeguindo);
@@ -71,6 +85,7 @@ public class PerfilAmigoActivity extends AppCompatActivity {
 
         //obterUsuarioLogado;
         idUsuarioLogado = UsuarioFirebase.getIdentificadorUsuario();
+        postagens = new ArrayList<>();
 
         //Configura toolbar
         Toolbar toolbar = findViewById(R.id.toolbarPrincipal);
@@ -86,6 +101,13 @@ public class PerfilAmigoActivity extends AppCompatActivity {
         if(bundle != null)
         {
             usuarioSelecionado = (Usuario) bundle.getSerializable("usuarioSelecionado");
+
+            //configurar referencia postagens usuario
+            postagensUsuarioRef = ConfiguracaoFirabese.getReferenceFirabese()
+                    .child("postagens")
+                    .child(usuarioSelecionado.getId());
+
+
             getSupportActionBar().setTitle(usuarioSelecionado.getNome());
 
             String caminhoFoto = usuarioSelecionado.getCaminhoFoto();
@@ -101,6 +123,65 @@ public class PerfilAmigoActivity extends AppCompatActivity {
                         .into(imagePerfil);
             }
         }
+        inicializarImageLoader();
+        carregarFotosPostagem();
+
+        gridViewPerfil.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Postagem postagem = postagens.get(position);
+                Intent i = new Intent(getApplicationContext(), VisualizarPostagemActivity.class);
+                i.putExtra("postagem", postagem);
+                i.putExtra("usuarioSelecionado", usuarioSelecionado);
+                startActivity(i);
+            }
+        });
+    }
+    public void inicializarImageLoader()
+    {
+        ImageLoaderConfiguration config = new ImageLoaderConfiguration
+                .Builder(this)
+                .memoryCache(new LruMemoryCache(2 * 1024 * 1024))
+                .memoryCacheSize(2 * 1024 * 1024)
+                .diskCacheSize(50 * 1024 * 1024)
+                .diskCacheFileCount(100)
+                .diskCacheFileNameGenerator(new HashCodeFileNameGenerator())
+                .build();
+        ImageLoader.getInstance().init(config);
+    }
+
+
+    public void carregarFotosPostagem()
+    {
+        postagens.clear();
+        postagensUsuarioRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                int tamanhoGrid = getResources().getDisplayMetrics().widthPixels;
+                int tamanhoImagem = tamanhoGrid/3;
+                gridViewPerfil.setColumnWidth(tamanhoImagem);
+
+                List<String> urlFotos = new ArrayList<>();
+                for(DataSnapshot ds : dataSnapshot.getChildren())
+                {
+                    Postagem postagem = dataSnapshot.getValue(Postagem.class);
+                    postagens.add(postagem);
+                    urlFotos.add(postagem.getCaminhoFoto());
+                }
+//                int qtdPostagem = urlFotos.size();
+//                textPublicacoes.setText(String.valueOf(qtdPostagem));
+
+                //Configurar Adapter
+                adapterGrid = new AdapterGrid(getApplicationContext(), R.layout.grid_postagem, urlFotos);
+                gridViewPerfil.setAdapter(adapterGrid);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void recuperarDadosUsuarioLogado()
@@ -125,8 +206,8 @@ public class PerfilAmigoActivity extends AppCompatActivity {
     private void verificaSegueUsuarioAmigo()
     {
         DatabaseReference seguidorRef = seguidoresRef
-                .child(idUsuarioLogado)
-                .child(usuarioSelecionado.getId());
+                .child(usuarioSelecionado.getId())
+                .child(idUsuarioLogado);
 
         seguidorRef.addListenerForSingleValueEvent(
                 new ValueEventListener() {
@@ -174,8 +255,8 @@ public class PerfilAmigoActivity extends AppCompatActivity {
         dadosAmigo.put("caminhoFoto", usuarioAmigo.getCaminhoFoto());
 
         DatabaseReference seguidorRef = seguidoresRef
-                .child(usuarioLogado.getId())
-                .child(usuarioAmigo.getId());
+                .child(usuarioAmigo.getId())
+                .child(usuarioLogado.getId());
 
         seguidorRef.setValue(dadosAmigo);
         buttonAcaoPerfil.setText("Seguindo");

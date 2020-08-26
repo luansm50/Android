@@ -68,7 +68,7 @@ public class AdapterPesquisa  extends RecyclerView.Adapter<AdapterPesquisa.MyVie
         {
             super((itemView));
 
-            foto = itemView.findViewById(R.id.imageFotoPesquisa);
+            foto = itemView.findViewById(R.id.imagePerfilPostagem);
             nome = itemView.findViewById(R.id.textNomePesquisa);
         }
     }

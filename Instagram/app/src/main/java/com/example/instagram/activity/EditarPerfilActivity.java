@@ -199,7 +199,7 @@ public class EditarPerfilActivity extends AppCompatActivity {
 
     public void inicializarComponentes()
     {
-        imageEditarPerfil       = findViewById(R.id.imageFotoPesquisa);
+        imageEditarPerfil       = findViewById(R.id.imagePerfilPostagem);
         textAlterarFoto         = findViewById(R.id.textAlterarFoto);
         editNomePerfil          = findViewById(R.id.editNomePerfil);
         editEmailPerfil         = findViewById(R.id.editEmailPerfil);

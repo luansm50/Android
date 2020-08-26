@@ -14,7 +14,7 @@
         android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imageFotoPesquisa"
+            android:id="@+id/imageFotoComentario"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:src="@drawable/avatar" />
@@ -29,4 +29,6 @@
             android:text="Nome do Usuario" />
 
     </LinearLayout>
+    <include layout="@layout/divisor"/>
+
 </LinearLayout>

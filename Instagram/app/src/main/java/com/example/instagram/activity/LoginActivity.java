@@ -58,11 +58,11 @@ public class LoginActivity extends AppCompatActivity
         });
     }
 
-    public void abrirCadastro(View view)
-    {
-        Intent i = new Intent(LoginActivity.this, CadastroActivity.class);
-        startActivity(i);
-    }
+//    public void abrirCadastro(View view)
+//    {
+//        Intent i = new Intent(LoginActivity.this, CadastroActivity.class);
+//        startActivity(i);
+//    }
 
 
     public void inicializarComponentes()

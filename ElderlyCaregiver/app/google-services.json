@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "395255192601",
+    "firebase_url": "https://homecare-db63c.firebaseio.com",
+    "project_id": "homecare-db63c",
+    "storage_bucket": "homecare-db63c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:395255192601:android:fb6cd22f4e8a42e8ad1e88",
+        "android_client_info": {
+          "package_name": "com.lm.elderlycaregiver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "395255192601-q4srff721e71a18irrtgva17ar17lpr7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lm.elderlycaregiver",
+            "certificate_hash": "b4fdeffa1bf0cf4a51fe5f35f8c41e85903fc2fe"
+          }
+        },
+        {
+          "client_id": "395255192601-d1imbum2letlgmkcqa0iddjb151gs0i9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCaKXBAXwAi39YjiQf52TUa9AbG_vpI8EM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "395255192601-d1imbum2letlgmkcqa0iddjb151gs0i9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -95,16 +95,13 @@ public class AdapterListaCuidador extends RecyclerView.Adapter<AdapterListaCuida
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            imageFotoCuidadorPesquisa           = itemView.findViewById(R.id.imageFotoCuidadorPesquisa);
+//            imageFotoCuidadorPesquisa           = itemView.findViewById(R.id.imageFotoCuidadorPesquisa);
             txtNameCuidadorPesquisa             = itemView.findViewById(R.id.txtNameCuidadorPesquisa);
             txtTelefoneCuidadorPesquisa         = itemView.findViewById(R.id.txtTelefoneCuidadorPesquisa);
             txtClassificacaoCuidadorPesquisa    = itemView.findViewById(R.id.txtClassificacaoCuidadorPesquisa);
             cbDiariaCuidadorPesquisa            = itemView.findViewById(R.id.cbDiariaCuidadorPesquisa);
             cbSemanalCuidadorPesquisa           = itemView.findViewById(R.id.cbSemanalCuidadorPesquisa);
             cbMensalCuidadorPesquisa            = itemView.findViewById(R.id.cbMensalCuidadorPesquisa);
-
-
-
         }
     }
 

@@ -12,13 +12,25 @@
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme" >
 
+
         <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/imageFotoCuidadorPesquisa"
+            android:id="@+id/imagePerfil"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:src="@drawable/avatar"/>
 
+        <TextView
+            android:id="@+id/textViewNomeToolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="TextView"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp" />
+
     </androidx.appcompat.widget.Toolbar>
+
+
 
 
 </FrameLayout>

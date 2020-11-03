@@ -15,12 +15,25 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Usuario  implements Serializable
 {
+    public static final String NOVO         = "NOVO";
+    public static final String RESPONSAVEL  = "RESPONSAVEL";
+    public static final String CUIDADOR     = "CUIDADOR";
+
     private String id;
     private String nome;
+    private String dataNascimento;
     private String telefone;
+    private String cpf;
     private String email;
     private String senha;
     private String caminhoFoto;
+
+    private Endereco endereco;
+    private Cuidador cuidador;
+
+
+    @Builder.Default
+    private String tipoUsuario = NOVO;
 
     @Exclude
     public String getSenha() {

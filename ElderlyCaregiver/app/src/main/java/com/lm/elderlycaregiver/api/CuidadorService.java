@@ -16,6 +16,5 @@ public interface CuidadorService
     @GET("cuidadores/{idUsuario}.json")
     Call<Cuidador> recuperarCuidador(@Path("idUsuario") String idUsuario);
 
-    @PATCH("cuidadores/{idUsuario}/.json")
-    Call<Cuidador> atualizarDadosCuidador(@Path("idUsuario") String idUsuario, @Body Cuidador cuidador);
+
 }

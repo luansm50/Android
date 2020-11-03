@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.lm.elderlycaregiver" >
+    package="com.lm.elderlycaregiver">
 
     <uses-feature
         android:name="android.hardware.camera2"
@@ -17,12 +17,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
-        <activity
-            android:name=".activity.Principal2Activity"
-            android:label="@string/title_activity_principal2"
-            android:theme="@style/AppTheme.NoActionBar" >
-        </activity>
+        android:theme="@style/AppTheme">
+        <activity android:name=".activity.cuidador.ValoresCuidadorActivity"></activity>
+        <activity android:name=".activity.cuidador.DadosCuidadorActivity" />
         <activity android:name=".activity.CadastroCuidadorActivity" />
         <activity android:name=".activity.PerfilResponsavelActivity" />
         <activity android:name=".activity.PerfilCuidadorActivity" />
@@ -30,7 +27,8 @@
         <activity android:name=".activity.CuidadoresActivity" />
         <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.CadastroActivity" />
-        <activity android:name=".activity.MainActivity" >
+        <activity android:name=".activity.Cadastro2Activity" />
+        <activity android:name=".activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

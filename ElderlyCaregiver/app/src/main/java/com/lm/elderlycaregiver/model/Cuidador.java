@@ -19,31 +19,22 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Cuidador  implements Serializable
 {
-    private String idUsuario;
-
-    private Usuario usuario;
+    @Builder.Default
+    private Double valorHora = 0.00;
 
     @Builder.Default
-    private Boolean ativado = false;
+    private Double valorDiurno = 0.00;
 
     @Builder.Default
-    private List<PlanoCuidador> planos = new ArrayList<>();
+    private Double valorNoturno = 0.00;
 
     @Builder.Default
-    private Double classificacao = 5.0;
+    private Boolean integral = false;
 
-    public Boolean salvar(Cuidador cuidador) {
-        DatabaseReference firebaseRef = ConfiguracaoFirebase.getFirebaseDatabase();
-        DatabaseReference usuariosRef = firebaseRef.child("cuidadores").child(cuidador.getIdUsuario());
-        usuariosRef.setValue(cuidador);
-        return true;
-    }
+    @Builder.Default
+    private Double valorIntegral = 0.00;
 
+    @Builder.Default
+    private Boolean cuidadorAtivado = false;
 
-
-
-    @Exclude
-    public Usuario getUsuario() {
-        return usuario;
-    }
 }

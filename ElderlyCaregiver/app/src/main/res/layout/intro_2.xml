@@ -20,7 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        app:srcCompat="@drawable/quatro" />
+        app:srcCompat="@drawable/icon" />
 
     <TextView
         android:id="@+id/textView"
@@ -32,7 +32,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:gravity="center"
-        android:text="Tudo organizado, no \n celular ou computador"
+        android:text="Um APP incrivel para vc ter controle \n de todos seus pacientes"
         android:textColor="@android:color/black"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -50,7 +50,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:gravity="center"
-        android:text="Encontre cuidadores para a pessoa que \n voce ama em um so lugar"
+        android:text="Aqui voce pode cadastrar seu perfil de cuidador \n e as pessoas pode te encontrar em um unico lugar."
         android:textColor="@android:color/darker_gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -110,10 +110,7 @@ public class ConversasFragment extends Fragment {
                 )
         );
 
-
-
         database = ConfiguracaoFirebase.getDatabaseReference();
-
 
         return view;
     }
